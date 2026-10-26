@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#17253B"><meta name="color-scheme" content="light"><meta name="description" content="مدیریت پذیرش و تعمیر دستگاه‌ها، مشتریان و فاکتورها">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="مدیریت تعمیرات"><link rel="stylesheet" href="styles.css">
+<title>AIhub Repair Desk | مدیریت تعمیرات</title>
+</head>
+<body>
+<div class="app-shell">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">R</div><div><strong>Repair Desk</strong><small>AIhub Tools</small></div></div>
+  <div class="shop-mini" id="shopMini">مدیریت تعمیرگاه</div>
+  <nav class="side-nav"><button class="nav-item active" data-view="dashboard">▦ نمای کلی</button><button class="nav-item" data-view="jobs">▣ پرونده‌های تعمیر</button><button class="nav-item" data-view="customers">♙ مشتریان</button><button class="nav-item" data-view="devices">▤ انواع دستگاه</button><button class="nav-item" data-view="finance">◷ درآمد و گزارش‌ها</button><button class="nav-item" data-view="settings">⚙ تنظیمات و پشتیبان</button></nav>
+  <div class="sidebar-foot"><span class="status-dot"></span> ذخیره‌سازی محلی فعال است</div>
+</aside>
+<main class="main">
+<header class="topbar"><div><p class="eyebrow" id="eyebrow">پنل مدیریت</p><h1 id="pageTitle">نمای کلی</h1></div><div class="top-actions"><span class="local-pill"><span class="status-dot"></span> آفلاین‌پسند</span><button class="btn btn-primary" id="newJobTop">＋ پذیرش دستگاه</button></div></header>
+<div id="viewRoot" class="view-root"></div>
+</main>
+</div>
+<nav class="mobile-nav" aria-label="ناوبری اصلی"><button class="active" data-view="dashboard"><span>⌂</span><small>خانه</small></button><button data-view="jobs"><span>▤</span><small>تعمیرها</small></button><button class="mobile-add" id="newJobMobile" aria-label="پذیرش دستگاه">＋</button><button data-view="customers"><span>♙</span><small>مشتریان</small></button><button data-view="finance"><span>▥</span><small>مالی</small></button><button data-view="settings"><span>☰</span><small>بیشتر</small></button></nav>
+
+<dialog id="jobDialog" class="modal"><form id="jobForm" method="dialog">
+<div class="modal-head"><div><p class="eyebrow">فرم پذیرش</p><h2 id="jobDialogTitle">پذیرش دستگاه جدید</h2></div><button type="button" class="icon-btn" data-close="jobDialog">✕</button></div>
+<input type="hidden" id="jobId">
+<div class="form-grid">
+<label>نام مشتری<input id="customerName" required maxlength="100" placeholder="نام و نام خانوادگی"></label>
+<label>شماره موبایل<input id="customerPhone" inputmode="tel" maxlength="20" placeholder="مثلاً 0912..."></label>
+<label>نوع دستگاه<div class="inline-field"><select id="deviceType" required></select><button type="button" class="btn btn-soft btn-small" id="addDeviceInline">＋ جدید</button></div></label>
+<label>برند / مدل<input id="deviceModel" maxlength="120" placeholder="مثلاً Samsung / مدل..."></label>
+<label>شماره سریال<input id="serialNumber" maxlength="100" placeholder="اختیاری"></label>
+<label>تاریخ تحویل مورد انتظار<input id="expectedDate" type="text" inputmode="numeric" class="jalali-date" placeholder="۱۴۰۵/۰۷/۲۷" autocomplete="off"></label>
+<label class="span-2">شرح خرابی از زبان مشتری<textarea id="faultDescription" rows="2" required placeholder="دستگاه چه ایرادی دارد؟"></textarea></label>
+<label class="span-2">وضعیت ظاهری / لوازم همراه<textarea id="appearance" rows="2" placeholder="خط‌وخش، ریموت، کابل برق، آداپتور و..."></textarea></label>
+<label>بیعانه (<span id="depositUnit">تومان</span>)<input id="deposit" class="money-input" type="text" inputmode="numeric" autocomplete="off" value="۰"></label>
+<label>وضعیت اولیه<select id="jobStatus"></select></label>
+</div><div class="modal-actions"><button type="button" class="btn btn-quiet" data-close="jobDialog">انصراف</button><button type="submit" class="btn btn-primary">ذخیره پذیرش</button></div>
+</form></dialog>
+<dialog id="deviceDialog" class="modal modal-narrow"><form id="deviceForm" method="dialog"><div class="modal-head"><div><p class="eyebrow">مدیریت دستگاه‌ها</p><h2>افزودن نوع دستگاه</h2></div><button type="button" class="icon-btn" data-close="deviceDialog">✕</button></div><label>نام نوع دستگاه<input id="newDeviceName" required maxlength="70" placeholder="مثلاً آمپلی‌فایر"></label><div class="modal-actions"><button type="button" class="btn btn-quiet" data-close="deviceDialog">انصراف</button><button type="submit" class="btn btn-primary">افزودن</button></div></form></dialog>
+<dialog id="customerDialog" class="modal modal-narrow"><form id="customerForm" method="dialog"><div class="modal-head"><div><p class="eyebrow">مشتریان</p><h2>ویرایش مشتری</h2></div><button type="button" class="icon-btn" data-close="customerDialog">✕</button></div><input type="hidden" id="customerEditOld"><p class="muted" style="font-size:12px">تغییر در همه‌ی <b id="ceCount">۰</b> پرونده‌ی این مشتری اعمال می‌شود.</p><label>نام مشتری<input id="ceName" required maxlength="100"></label><label>شماره موبایل<input id="cePhone" inputmode="tel" maxlength="20"></label><div class="modal-actions"><button type="button" class="btn btn-quiet" data-close="customerDialog">انصراف</button><button type="submit" class="btn btn-primary">ذخیره</button></div></form></dialog>
+<dialog id="detailDialog" class="modal modal-wide"><div id="detailRoot"></div></dialog>
+<dialog id="invoiceDialog" class="modal modal-wide"><div id="invoiceRoot"></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="db.js"></script><script src="license.js"></script><script src="app.js"></script>
+</body></html>

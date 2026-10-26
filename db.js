@@ -1,0 +1,11 @@
+(() => {
+ const DB_NAME="aihub-repair-desk", VERSION=1, STORES=["jobs","customers","devices","settings","payments"]; let promise;
+ function open(){if(promise)return promise;promise=new Promise((resolve,reject)=>{const r=indexedDB.open(DB_NAME,VERSION);r.onupgradeneeded=()=>{const db=r.result;for(const n of STORES)if(!db.objectStoreNames.contains(n)){const s=db.createObjectStore(n,{keyPath:"id"});if(n==="jobs"){s.createIndex("receiptNo","receiptNo",{unique:true});s.createIndex("customerPhone","customerPhone");s.createIndex("status","status");}}};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});return promise}
+ async function all(n){const db=await open();return new Promise((res,rej)=>{const r=db.transaction(n,"readonly").objectStore(n).getAll();r.onsuccess=()=>res(r.result||[]);r.onerror=()=>rej(r.error)})}
+ async function get(n,id){const db=await open();return new Promise((res,rej)=>{const r=db.transaction(n,"readonly").objectStore(n).get(id);r.onsuccess=()=>res(r.result||null);r.onerror=()=>rej(r.error)})}
+ async function put(n,v){const db=await open();return new Promise((res,rej)=>{const tx=db.transaction(n,"readwrite");tx.objectStore(n).put(v);tx.oncomplete=()=>res(v);tx.onerror=()=>rej(tx.error);tx.onabort=()=>rej(tx.error)})}
+ async function remove(n,id){const db=await open();return new Promise((res,rej)=>{const tx=db.transaction(n,"readwrite");tx.objectStore(n).delete(id);tx.oncomplete=()=>res(true);tx.onerror=()=>rej(tx.error)})}
+ async function clearAll(){const db=await open();return new Promise((res,rej)=>{const tx=db.transaction(STORES,"readwrite");STORES.forEach(n=>tx.objectStore(n).clear());tx.oncomplete=()=>res(true);tx.onerror=()=>rej(tx.error)})}
+ async function replaceAll(data){const db=await open();return new Promise((res,rej)=>{const tx=db.transaction(STORES,"readwrite");try{STORES.forEach(n=>{const s=tx.objectStore(n);s.clear();(data[n]||[]).forEach(v=>s.put(v))})}catch(e){try{tx.abort()}catch(_){}rej(e);return}tx.oncomplete=()=>res(true);tx.onerror=()=>rej(tx.error);tx.onabort=()=>rej(tx.error||new Error("abort"))})}
+ window.RepairDB={all,get,put,remove,clearAll,replaceAll,stores:STORES};
+})();
