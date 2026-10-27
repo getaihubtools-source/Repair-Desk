@@ -1,5 +1,5 @@
-const CACHE="aihub-repair-desk-v10";
-const CORE=["./","./index.html","./app.html","./styles.css","./db.js","./license.js","./app.js","./manifest.webmanifest","./icon.svg","./icon-180.png","./icon-192.png","./icon-512.png","./icon-maskable-512.png","./assets/shot-dashboard.webp","./assets/shot-detail.webp","./assets/shot-invoice.webp","./assets/shot-finance.webp","./assets/shot-mobile.webp"];
+const CACHE="aihub-repair-desk-v11";
+const CORE=["./","./index.html","./app.html","./styles.css","./db.js","./license.js","./datepicker.js","./app.js","./manifest.webmanifest","./icon.svg","./icon-180.png","./icon-192.png","./icon-512.png","./icon-maskable-512.png","./assets/shot-dashboard.webp","./assets/shot-detail.webp","./assets/shot-invoice.webp","./assets/shot-finance.webp","./assets/shot-mobile.webp"];
 self.addEventListener("install",event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
 });
